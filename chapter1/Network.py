@@ -2,6 +2,7 @@
 
 
 import numpy as np
+import mnist_loader
 
 class Network(object):
 
@@ -69,10 +70,6 @@ class Network(object):
         delta = self.cost_derivative(activations[-1], y) * self.sigmoid_prime(zs[-1])
         nabla_b[-1] = delta
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
-                # Note that the variable l in the loop below is used a little
-                # differently to the notation in Chapter 2 of the book. Here, # l = 1 means the last layer of neurons, l = 2 is the
-                # second-last layer, and so on. It's a renumbering of the
-                # scheme in the book, used here to take advantage of the fact # that Python can use negative indices in lists.
         for l in xrange(2, self.num_layers):
             z = zs[-l]
             sp = self.sigmoid_prime(z)
@@ -91,4 +88,6 @@ class Network(object):
 
 
 
-
+training_data, validation_data, test_data = mnist_loader.load_data_wrapper('/Users/xuan/Downloads/neural-networks-and-deep-learning-master/data/mnist.pkl.gz')
+net = Network([784, 30, 10])
+net.SGD(training_data, 30, 10, 3.0 ,test_data=test_data)
